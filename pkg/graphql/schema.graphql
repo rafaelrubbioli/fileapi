@@ -1,0 +1,79 @@
+# Scalars
+"The `Time` scalar type represents a DateTime serialized as RFC 3339."
+scalar Time
+
+"The `UploadFile, // b.txt` scalar type represents a multipart file upload."
+scalar Upload
+
+# TYPES
+type File {
+  "Unique identifier to the file"
+  id: String!
+  "File name"
+  name: String!
+  "File path"
+  path: String!
+  "File owner"
+  user: Int!
+  "Content type"
+  fileType: String!
+  "Size in bytes"
+  size: Int!
+  "Creation date"
+  createdAt: Time!
+  "Last update date"
+  updatedAt: Time!
+  "URL to download the file"
+  downloadURL: String!
+}
+
+type Dir {
+  "Current dir"
+  path: String!
+  "Files in current path"
+  files: [File!]!
+  "Subdirs in current path"
+  dirs: [Dir!]!
+}
+
+# QUERIES
+type Query {
+  "Get file by id"
+  file(id: String!): File!
+
+  "List user files"
+  listUserFiles(user: Int!, pathPrefix: String): [File!]!
+
+  "Show dir tree"
+  fileTree: [Dir!]!
+}
+
+# MUTATIONS
+type Mutation {
+  "Upload new file"
+  upload(input: UploadInput!): File!
+
+  "Move file to new path (returns result file)"
+  move(input: MoveInput!): File!
+
+  "delete file"
+  delete(id: String!): Boolean!
+}
+
+# INPUT
+input UploadInput {
+  file: Upload!
+  "File owner"
+  user: Int!
+  "Destination path"
+  path: String!
+}
+
+input MoveInput {
+  "Identifier of the desired file to move"
+  id: String!
+  "Destination user"
+  user: Int!
+  "Destination path"
+  newPath: String!
+}

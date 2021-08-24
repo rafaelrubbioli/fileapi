@@ -1,0 +1,11 @@
+exec:
+  filename: gqlgen/generated.go
+  package: gqlgen
+
+model:
+  filename: model/generated.go
+  package: model
+
+resolver:
+  filename: resolver/app.go
+  type: Resolver
