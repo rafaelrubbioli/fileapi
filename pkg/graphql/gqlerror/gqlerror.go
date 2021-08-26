@@ -1,9 +1,11 @@
 package gqlerror
 
 import (
+	"errors"
 	"fmt"
 	"log"
 
+	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -13,6 +15,7 @@ var (
 	ErrInvalidPath        = newTyped("path cannot contain '..'", BadRequestType)
 	ErrInvalidID          = newTyped("invalid id", BadRequestType)
 	ErrNotYetSupported    = newTyped("not yet supported", ServiceUnavailableType)
+	ErrNotFound           = newTyped("not found", NotFoundType)
 )
 
 type ErrorType string
@@ -27,11 +30,21 @@ var (
 	BadRequestType         ErrorType = "BAD_REQUEST"
 )
 
-var errors = map[error]error{}
+var errorMap = map[error]error{}
 
 func Error(err error) error {
-	if newErr, ok := errors[err]; ok {
+	if newErr, ok := errorMap[err]; ok {
 		return newErr
+	}
+
+	var errNoSuchKey *types.NoSuchKey
+	if errors.As(err, &errNoSuchKey) {
+		return ErrNotFound
+	}
+
+	var errNotFound *types.NotFound
+	if errors.As(err, &errNotFound) {
+		return errNotFound
 	}
 
 	log.Println(err)
