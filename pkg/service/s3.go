@@ -62,6 +62,11 @@ func (s s3service) Create(ctx context.Context, user, size int, name, path, conte
 }
 
 func (s s3service) Get(ctx context.Context, id string) (*entity.File, error) {
+	user, path, name, err := parseKey(id)
+	if err != nil {
+		return nil, err
+	}
+
 	result, err := s.client.GetObject(ctx, &s3.GetObjectInput{
 		Bucket: aws.String(config.BucketName),
 		Key:    aws.String(id),
@@ -71,11 +76,6 @@ func (s s3service) Get(ctx context.Context, id string) (*entity.File, error) {
 	}
 
 	createdAt, err := time.Parse(time.RFC3339, result.Metadata["created_at"])
-	if err != nil {
-		return nil, err
-	}
-
-	user, path, name, err := parseKey(id)
 	if err != nil {
 		return nil, err
 	}
@@ -119,6 +119,7 @@ func (s s3service) GetByUser(ctx context.Context, user int, prefix string) ([]*e
 				return nil, err
 			}
 
+			// TODO list objects doesnt return all fields (may need to get() each one here)
 			file := &entity.File{
 				ID:   *result.Key,
 				Name: name,
