@@ -7,7 +7,7 @@ Some examples of queries/mutations on graphql
 
 ## Usage
 ### Upload
-To upload files use form-files as shown
+To upload files use form-files as shown. New files uploaded to the same path as an existing file of the same user will replace them. 
 ```
 curl -X POST -i https://rubbioli.com/fileapi/graphql \
 -F operations='{"query":"mutation($file: Upload!) {  upload(input:{ file: $file   user: 1    path: \"nginx/test/\"  }){    id  }}","variables": { "file": null } }' \  
@@ -69,7 +69,7 @@ query list {
 ```
 
 ## Roadmap
-- [ ] Parse s3 custom errors (such as not found, bad request)
+- [x] Parse s3 custom errors (such as not found, bad request)
 - [ ] List file tree
 - [ ] cmd/worker to process jobs asynchronously with retry (such as deleting a file)
 - [ ] Finish unit tests
