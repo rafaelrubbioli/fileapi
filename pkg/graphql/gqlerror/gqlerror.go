@@ -1,11 +1,10 @@
 package gqlerror
 
 import (
-	"errors"
 	"fmt"
 	"log"
 
-	"github.com/aws/aws-sdk-go-v2/service/s3/types"
+	"github.com/rafaelrubbioli/fileapi/pkg/service"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -16,6 +15,7 @@ var (
 	ErrInvalidID          = newTyped("invalid id", BadRequestType)
 	ErrNotYetSupported    = newTyped("not yet supported", ServiceUnavailableType)
 	ErrNotFound           = newTyped("not found", NotFoundType)
+	ErrDuplicateFile      = newTyped("file already exists on path", BadRequestType)
 )
 
 type ErrorType string
@@ -30,21 +30,15 @@ var (
 	BadRequestType         ErrorType = "BAD_REQUEST"
 )
 
-var errorMap = map[error]error{}
+var errorMap = map[error]error{
+	service.ErrInvalidKey:    ErrInvalidID,
+	service.ErrNotFound:      ErrNotFound,
+	service.ErrDuplicateFile: ErrDuplicateFile,
+}
 
 func Error(err error) error {
 	if newErr, ok := errorMap[err]; ok {
 		return newErr
-	}
-
-	var errNoSuchKey *types.NoSuchKey
-	if errors.As(err, &errNoSuchKey) {
-		return ErrNotFound
-	}
-
-	var errNotFound *types.NotFound
-	if errors.As(err, &errNotFound) {
-		return errNotFound
 	}
 
 	log.Println(err)

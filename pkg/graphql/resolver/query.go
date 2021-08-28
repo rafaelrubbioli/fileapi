@@ -6,11 +6,10 @@ import (
 
 	"github.com/rafaelrubbioli/fileapi/pkg/graphql/gqlerror"
 	"github.com/rafaelrubbioli/fileapi/pkg/graphql/model"
-	"github.com/rafaelrubbioli/fileapi/pkg/service"
 )
 
 type query struct {
-	service service.Service
+	*app
 }
 
 func (q query) ListUserFiles(ctx context.Context, user int, pathPrefix *string) ([]*model.File, error) {
@@ -27,7 +26,8 @@ func (q query) ListUserFiles(ctx context.Context, user int, pathPrefix *string) 
 	return model.NewFiles(files), nil
 }
 
-func (q query) FileTree(ctx context.Context) ([]*model.Dir, error) {
+func (q query) FileTree(_ context.Context) ([]*model.Dir, error) {
+	//TODO implement me
 	return nil, gqlerror.ErrNotYetSupported
 }
 

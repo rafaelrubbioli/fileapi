@@ -385,6 +385,8 @@ input UploadInput {
   user: Int!
   "Destination path"
   path: String!
+  "If set will replace duplicate files without error"
+  overwrite: Boolean! = false
 }
 
 input MoveInput {
@@ -394,6 +396,8 @@ input MoveInput {
   user: Int!
   "Destination path"
   newPath: String!
+  "If set will replace duplicate files without error"
+  overwrite: Boolean! = false
 }
 `, BuiltIn: false},
 }
@@ -2393,6 +2397,14 @@ func (ec *executionContext) unmarshalInputMoveInput(ctx context.Context, obj int
 			if err != nil {
 				return it, err
 			}
+		case "overwrite":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("overwrite"))
+			it.Overwrite, err = ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		}
 	}
 
@@ -2426,6 +2438,14 @@ func (ec *executionContext) unmarshalInputUploadInput(ctx context.Context, obj i
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("path"))
 			it.Path, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "overwrite":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("overwrite"))
+			it.Overwrite, err = ec.unmarshalNBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}

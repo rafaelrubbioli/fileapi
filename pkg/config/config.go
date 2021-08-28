@@ -29,6 +29,7 @@ func init() {
 	// Project defaults
 	viper.SetDefault("http_port", 5555)
 	viper.SetDefault("base_url", "https://rubbioli.com/fileapi/graphql")
+	viper.SetDefault("file_max_size", 500)
 }
 
 func Environment() string {
@@ -50,10 +51,6 @@ func BaseURL() string {
 	return viper.GetString("base_url")
 }
 
-func AWSKey() string {
-	return viper.GetString("aws_key")
-}
-
-func AWSSecret() string {
-	return viper.GetString("aws_secret")
+func MaxUploadFileSize() int {
+	return viper.GetInt("file_max_size")
 }

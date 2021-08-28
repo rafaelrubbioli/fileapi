@@ -67,6 +67,8 @@ input UploadInput {
   user: Int!
   "Destination path"
   path: String!
+  "If set will replace duplicate files without error"
+  overwrite: Boolean! = false
 }
 
 input MoveInput {
@@ -76,4 +78,6 @@ input MoveInput {
   user: Int!
   "Destination path"
   newPath: String!
+  "If set will replace duplicate files without error"
+  overwrite: Boolean! = false
 }

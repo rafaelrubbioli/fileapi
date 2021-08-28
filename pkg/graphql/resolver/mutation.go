@@ -5,17 +5,17 @@ import (
 	"encoding/base64"
 	"strings"
 
+	"github.com/rafaelrubbioli/fileapi/pkg/config"
 	"github.com/rafaelrubbioli/fileapi/pkg/graphql/gqlerror"
 	"github.com/rafaelrubbioli/fileapi/pkg/graphql/model"
-	"github.com/rafaelrubbioli/fileapi/pkg/service"
 )
 
 type mutation struct {
-	service service.Service
+	*app
 }
 
 func (m mutation) Upload(ctx context.Context, input model.UploadInput) (*model.File, error) {
-	if input.File.Size > 500 {
+	if int(input.File.Size) > config.MaxUploadFileSize() {
 		return nil, gqlerror.ErrFileTooBig
 	}
 
@@ -23,7 +23,7 @@ func (m mutation) Upload(ctx context.Context, input model.UploadInput) (*model.F
 		return nil, gqlerror.ErrInvalidPath
 	}
 
-	file, err := m.service.Create(ctx, input.User, int(input.File.Size), input.File.Filename, input.Path, input.File.ContentType, input.File.File)
+	file, err := m.service.Create(ctx, input.User, int(input.File.Size), input.File.Filename, input.Path, input.File.ContentType, input.File.File, input.Overwrite)
 	if err != nil {
 		return nil, gqlerror.Error(err)
 	}
@@ -37,7 +37,7 @@ func (m mutation) Move(ctx context.Context, input model.MoveInput) (*model.File,
 		return nil, gqlerror.ErrInvalidID
 	}
 
-	resultFile, err := m.service.Move(ctx, input.User, string(key), input.NewPath)
+	resultFile, err := m.service.Move(ctx, input.User, string(key), input.NewPath, input.Overwrite)
 	if err != nil {
 		return nil, err
 	}

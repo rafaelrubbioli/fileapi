@@ -45,6 +45,8 @@ type MoveInput struct {
 	User int `json:"user"`
 	// Destination path
 	NewPath string `json:"newPath"`
+	// If set will replace duplicate files without error
+	Overwrite bool `json:"overwrite"`
 }
 
 type UploadInput struct {
@@ -53,4 +55,6 @@ type UploadInput struct {
 	User int `json:"user"`
 	// Destination path
 	Path string `json:"path"`
+	// If set will replace duplicate files without error
+	Overwrite bool `json:"overwrite"`
 }

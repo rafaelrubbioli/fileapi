@@ -10,11 +10,11 @@ type app struct {
 }
 
 func (a app) Query() gqlgen.QueryResolver {
-	return query{service: a.service}
+	return query{app: &a}
 }
 
 func (a app) Mutation() gqlgen.MutationResolver {
-	return mutation{service: a.service}
+	return mutation{app: &a}
 }
 
 func New(service service.Service) gqlgen.ResolverRoot {
