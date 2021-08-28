@@ -2,6 +2,7 @@
 <a href="https://opensource.org/licenses/MIT">
 <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License MIT">
 </a>
+[![Actions Status](https://github.com/rafaelrubbioli/fileapi/actions/workflows/deploy.yaml/badge.svg)](https://github.com/rafaelrubbioli/fileapi/actions)
 
 ## File API
 This is a graphql api to upload and retrieve files on cloud storage (only s3 supported for now)
