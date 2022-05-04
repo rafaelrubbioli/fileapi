@@ -10,7 +10,7 @@ require (
 	github.com/go-chi/chi v3.3.2+incompatible
 	github.com/golang/mock v1.5.0
 	github.com/spf13/viper v1.8.1
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	github.com/vektah/gqlparser/v2 v2.1.0
 )
 
