@@ -1,4 +1,4 @@
-FROM golang:1.16 as builder
+FROM golang:1.18 as builder
 COPY . /app
 WORKDIR /app
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o fileapi cmd/http/http.go
